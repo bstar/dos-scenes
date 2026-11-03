@@ -17,10 +17,10 @@ def compose(directory,t,frame,ambient=True):
  if (d/'MOON.BIN').exists():
   b=(d/'MOON.BIN').read_bytes();x,y,w,h=struct.unpack_from('<4H',b);duration=int(opts.get('MOON_SECONDS',3600))*560
   if t<duration:
-   i,rem=divmod(t*32,duration);part=rem*3600//duration
+   i,rem=divmod(t*32,duration)
    arc=[(round(256*math.sin(i*math.pi/64)),round(256*(1-math.cos(i*math.pi/64)))) for i in range(33)]
-   x+=int(int(opts.get('MOON_DX',88))*(arc[i][0]+(arc[i+1][0]-arc[i][0])*part//3600)/256)
-   y+=int(int(opts.get('MOON_DY',80))*(arc[i][1]+(arc[i+1][1]-arc[i][1])*part//3600)/256)
+   x+=int(int(opts.get('MOON_DX',88))*(arc[i][0]+(arc[i+1][0]-arc[i][0])*rem//duration)/256)
+   y+=int(int(opts.get('MOON_DY',80))*(arc[i][1]+(arc[i+1][1]-arc[i][1])*rem//duration)/256)
    for yy in range(h):
     for xx in range(w):
      c=b[8+yy*w+xx]

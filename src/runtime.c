@@ -431,13 +431,14 @@ static unsigned moon_arc[33][2]={
     {256,256},
 };
 static void draw_moon(unsigned long now) {
-    unsigned phase,part,x,y,c; int left,top;
+    unsigned phase,x,y,c; unsigned long remainder; int left,top;
     if(!moon_sprite) return;
     if(now>=moon_duration) return;
     phase=(unsigned)(now*32UL/moon_duration);
-    part=(unsigned)((now*32UL%moon_duration)*3600UL/moon_duration);
-    left=(int)moon_x+(int)((long)moon_dx*(long)(moon_arc[phase][0]+(unsigned long)(moon_arc[phase+1][0]-moon_arc[phase][0])*part/3600UL)/256L);
-    top=(int)moon_y+(int)((long)moon_dy*(long)(moon_arc[phase][1]+(unsigned long)(moon_arc[phase+1][1]-moon_arc[phase][1])*part/3600UL)/256L);
+    /* Delta is at most 13: this product fits 32 bits even for a 24h arc. */
+    remainder=now*32UL%moon_duration;
+    left=(int)moon_x+(int)((long)moon_dx*(long)(moon_arc[phase][0]+(unsigned long)(moon_arc[phase+1][0]-moon_arc[phase][0])*remainder/moon_duration)/256L);
+    top=(int)moon_y+(int)((long)moon_dy*(long)(moon_arc[phase][1]+(unsigned long)(moon_arc[phase+1][1]-moon_arc[phase][1])*remainder/moon_duration)/256L);
     for(y=0;y<moon_h;y++) for(x=0;x<moon_w;x++) {
         c=moon_sprite[8+y*moon_w+x];
         if(c!=255 && is_sky(left+x,top+y)) pixel(left+x,top+y,c);
