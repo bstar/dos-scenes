@@ -17,4 +17,5 @@ Use `tools/scene_format.py` to encode planar pixels and detail records.
 
 Keep licensing/provenance with each pack. Code licensing does not replace a
 scene's artwork or music terms. Generated assets from the original demo are
-MIT; the island extraction outputs are external material and stay local.
+MIT; the bundled island artwork and musical arrangements keep the credits
+listed in `scenes/island/CREDITS.md`. Raw game, video and MIDI inputs stay local.

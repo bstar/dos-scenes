@@ -9,6 +9,7 @@ if not (os.environ.get('DOSBOX') or shutil.which('dosbox-x')):
 def run(*argv):subprocess.run([sys.executable,*map(str,argv)],cwd=R,check=True)
 if not args.no_build:run(R/'tools/build.py')
 run(R/'tests/test_player.py')
+run(R/'tests/test_player.py','--pack',R/'build/scenes/island')
 run(R/'tests/test_volume.py')
 run(R/'tests/test_tsr.py')
 run(R/'tests/test_tsr.py','--hotkey')

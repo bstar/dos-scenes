@@ -6,19 +6,18 @@ https://www.youtube.com/watch?v=ikaqus5_QIg
 
 The originally supplied timestamped link is
 https://www.youtube.com/watch?v=ikaqus5_QIg&t=10722s
-*The Secrets of Monkey Island – An Evening With Ron Gilbert*, published by
+*The Secrets of Monkey Island - An Evening With Ron Gilbert*, published by
 The Video Game History Foundation. The long opening sequence, including the clearer cloud views around 18 minutes,
 was the visual and musical reference. The DOS implementation, timing controls,
 walking routes, lights, water animation and adaptation tools are this project's
 work; no authorship of the source game, stream or arrangements is claimed.
 
 The island artwork originates in the English EGA edition of *The Secret of
-Monkey Island* (Lucasfilm Games, 1990). Extract it from your own copy. Game
-artwork assets, video crops, MIDI files and derived performances are not included
-in the playable distribution and are not covered by its MIT license. The README
-includes a documentation screenshot (`docs/island.png`) captured from the DOS
-player; the underlying game artwork remains credited to its original rights
-holders and is outside the MIT license.
+Monkey Island* (Lucasfilm Games, 1990). The included scene pack and README
+screenshot retain that artwork credit. The engine, adaptation tools and original
+Night Coast demo are MIT licensed; the original game artwork and credited
+musical arrangements are acknowledged separately and are not relicensed as
+original MIT material.
 
 | Tune | Arrangement credit | Source | Playback |
 |---|---|---|---|
@@ -27,10 +26,11 @@ holders and is outside the MIT license.
 | Homeward Bound | Lesley Nelson | https://www.contemplator.com/sea/homeward.html | Enabled |
 | Nelson's Blood / We'll Roll the Old Chariot Along | John Renfro Davis | https://www.contemplator.com/sea/nblood.html | Disabled |
 
-These traditional tunes and the particular MIDI arrangements have separate
-provenance. A traditional melody does not make a downloaded arrangement public
-domain. Obtain the files under their original terms. The enabled OPL2
-performances retain the arrangement credits and include synthesized surf layers.
-The original General MIDI bank used during local conversion came from AdPlug's
-Jorrit Rouwe/Allegro-derived bank; no AdPlug library or bank is linked or shipped
-here. Its terms apply to any separately distributed bank-derived material.
+The three included OPL2 tracks are treatments of these credited MIDI
+arrangements, with added synthesized wave and steady ocean layers. Nelson's
+Blood remains disabled and its OPL file is not bundled. Original MIDI and
+Furnace project files are not included.
+
+The General MIDI bank used during local conversion came from AdPlug's Jorrit
+Rouwe/Allegro-derived bank. No AdPlug library or complete bank is linked or
+shipped with the runtime.

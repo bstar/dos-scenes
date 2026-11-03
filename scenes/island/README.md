@@ -2,10 +2,17 @@
 
 This pack reproduces the animated presentation used as the project's first
 reference scene. See [CREDITS.md](CREDITS.md) for the video concept, original game,
-all MIDI arrangers and source links. No game, stream, MIDI or derived audio
-files are included in Git.
+all MIDI arrangers and source links. The ready-to-run assets and three OPL2
+tracks are included under `pack/`. The original game files, video clips, MIDI
+inputs and Furnace projects are not included.
 
-If you already have the locally extracted assets, build a private pack:
+Build the included pack:
+
+```sh
+python3 tools/pack_island.py
+```
+
+To regenerate it from your own locally extracted source assets:
 
 ```sh
 python3 tools/pack_island.py --assets /path/to/extracted-assets
@@ -50,8 +57,7 @@ python3 tools/prepare_effects.py
 
 The runtime pack uses `ORIGINAL.EGA` as its clean `SCENE.EGA`; the moving moon is
 composited separately, so no moon is left behind in the original sky. Cloud,
-terrain and meteor recovery outputs remain local and require their original
-rights to redistribute. The scene's original code/data definition is in
+terrain and meteor recovery inputs remain local. The scene's original code/data definition is in
 `details.json`; it supplies lights, routes and water motion to the generic engine.
 
 For music, retain the original arrangement credits and source terms. Edit your

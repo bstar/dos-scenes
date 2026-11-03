@@ -19,3 +19,5 @@ if (R/'src/tsr.c').exists():
  struct.pack_into('<H',image,12,struct.unpack_from('<H',image,10)[0])
  (B/'SCENETSR.EXE').write_bytes(image)
 run(['python3',str(R/'tools/make_demo.py')])
+
+run(['python3',str(R/'tools/pack_island.py')])

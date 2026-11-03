@@ -3,219 +3,74 @@
 [![DOS build and tests](https://github.com/bstar/dos-scenes/actions/workflows/dos.yml/badge.svg?branch=main)](https://github.com/bstar/dos-scenes/actions/workflows/dos.yml)
 [![Latest release](https://img.shields.io/github/v/release/bstar/dos-scenes)](https://github.com/bstar/dos-scenes/releases/latest)
 
-A reusable scene player for real-mode DOS: EGA graphics, AdLib music, small
-animated details, and three ways to run the same scene—standalone, resident,
-or embedded in another foreground application.
+Animated scenes for MS-DOS, with EGA graphics and AdLib OPL2 music. Run them as
+a standalone app, an optional TSR screensaver, or inside another application.
 
-Scene geometry and playlists live in data files. The runtime is shared across
-packs rather than compiled around one island or one soundtrack. An original
-**Night Coast** demo is generated from source and can be redistributed under
-MIT. The first externally sourced pack recreates the island presentation from
-[the Video Game History Foundation stream](https://www.youtube.com/watch?v=ikaqus5_QIg).
+![Island scene running in DOS](docs/island.png)
 
-![Island scene running in the DOS player: moon, clouds, summit fire and town lights](docs/island.png)
+## Download and run
 
-*Island scene captured from the DOS player in DOSBox-X. Artwork: The Secret of
-Monkey Island, Lucasfilm Games (1990); presentation inspired by the
-[Video Game History Foundation stream](https://www.youtube.com/watch?v=ikaqus5_QIg).
-This documentation screenshot is outside the MIT license; see
-[the full credits](scenes/island/CREDITS.md).*
-
-## Features
-
-- 320×200, 16-color planar EGA with hidden-page rendering and palette control.
-- Masked moving clouds, sprite animation, timed meteors, slow moon arcs,
-  independent window lights, pixel walkers and water ripples.
-- Walking paths with pauses, independent one-way journeys and per-pixel
-  foreground occlusion. The island routes reach the summit and follow its
-  town and dock lanes.
-- OPL2 register-stream playback, including rhythm/noise voices. A playlist can
-  contain up to 16 tracks; no MIDI interface, samples or floating-point unit is required.
-- Keyboard-only volume, saved per scene across player and screensaver restarts.
-- AdLib write recovery delays plus a bounded PIT-clock guard and `/SLOWOPL`.
-- Standalone `SCENE.EXE`, directly loaded `SCENETSR.EXE`, and a cooperative C API.
-
-## Download for MS-DOS
-
-Download [DOSSCENE.ZIP](https://github.com/bstar/dos-scenes/releases/latest/download/DOSSCENE.ZIP)
-from the [latest release](https://github.com/bstar/dos-scenes/releases/latest).
-It includes `SCENE.EXE`, the optional `SCENETSR.EXE`, the original Night Coast
-scene with OPL2 music, and DOS-format instructions. Unzip it into `C:\SCENES`
-and run `SCENE C:\SCENES\DEMO`. No installer or boot changes are required.
-The island's external artwork and music are supplied separately from your own
-assets. Release checksums are provided in `SHA256.TXT`.
-
-## Build
-
-Use Open Watcom 2 and Python3. DOSBox-X is needed for the runtime tests.
-
-```sh
-./build.sh --watcom /path/to/watcom
-```
-
-Or use the pinned Nix environment:
-
-```sh
-nix develop --command python3 tools/build.py
-nix develop --command python3 tests/run.py --no-build
-```
-
-Hosted CI uses the same pinned Nix Python/DOSBox-X environment with a
-checksum-verified [upstream Open Watcom SDK](https://github.com/open-watcom/open-watcom-v2/releases/tag/2026-11-01-Build),
-avoiding a full compiler bootstrap on each run. `tools/fetch_watcom.py` fetches
-that SDK; the normal Nix development shell still builds Watcom from source.
-
-Run `python3 tools/package.py` after building to create the DOS release ZIP
-and its SHA-256 checksum in `dist/`.
-
-The build produces `build/SCENE.EXE`, `build/SCENETSR.EXE`, an embedded runtime
-object, and `build/scenes/demo`. It does not create a DOS setup program.
-Copy the executables and the scene directory to your DOS disk.
-
-## Run a scene
-
-For example, copy the demo to `C:\SCENES\DEMO`, then run:
+Download [DOSSCENE.ZIP](https://github.com/bstar/dos-scenes/releases/latest/download/DOSSCENE.ZIP),
+extract it into `C:\SCENES`, and run:
 
 ```dos
-SCENE C:\SCENES\DEMO
+SCENE C:\SCENES\ISLAND
 ```
+
+The release includes the island scene, three OPL2 songs with ocean sounds, and
+an original Night Coast demo (`SCENE C:\SCENES\DEMO`). No installer or boot changes.
+Checksums are included with the [release](https://github.com/bstar/dos-scenes/releases/latest).
+
+The island has moving clouds, a setting moon, shooting stars, summit fire,
+subtle lights and water, and people walking through town and up the mountain.
 
 | Key | Action |
 |---|---|
-| `+` / `-` | Raise/lower master volume; `=` / `_` also work |
-| `M` | Mute or restart the current track |
-| `N` | Next enabled track |
+| `+` / `-` | Adjust volume; remembered between runs |
+| `M` | Mute or restart music |
+| `N` | Next song |
 | `Esc` | Exit the standalone player |
 
-Volume changes save to `VOLUME.CFG` in the scene directory after about half a
-second without another volume key, and on exit or screensaver wake. Level 0
-stays silent after restart. Mute does not replace the saved master level.
-Configuration writes happen in the foreground, with a temporary file, backup
-and retry after an I/O failure. No volume overlay is drawn.
-
-Useful options:
+## TSR screensaver
 
 ```dos
-SCENE C:\SCENES\DEMO /SLOWOPL
-SCENE C:\SCENES\DEMO /SILENT
-SCENE C:\SCENES\DEMO /LOG /FRAMES=140 /DUMP
-SCENE C:\SCENES\DEMO /AT=1800 /FRAMES=4 /DUMP
+SCENETSR C:\SCENES\ISLAND /IDLE=120
 ```
 
-`/LOG` appends `SCENE.LOG`; L marks an audio problem. `/DUMP` saves the displayed
-planes as `LAST.EGA`. `/AT` advances scene animation time for inspection; it
-does not seek the music. `/TRACK=n` chooses a starting playlist entry.
+Ctrl-Alt-S requests activation; `/IDLE=0` selects hotkey-only mode. The TSR waits
+for a safe DOS idle point. `/OFF` disables it, `/ON` enables it, and `/STATUS`
+shows its state. Reboot removes it; there is no automatic boot installation.
 
-## Resident mode
+## Requirements
 
-Load the TSR directly from DOS:
+EGA/VGA and enough conventional memory; a 286 or faster is the practical target.
+AdLib is optional. No FPU, EMS or XMS is required. `/SLOWOPL` adds extra AdLib
+write delay for faster machines. The player was tested on a 386SX-16 with AdLib.
 
-```dos
-SCENETSR C:\SCENES\DEMO /IDLE=120
-```
+The TSR requires DOS 5+, standard VGA 80x25 text mode and about 102 KiB resident
+memory, plus the scene's working memory. It defers during graphics or low-memory
+conditions. TSR validation is currently through DOSBox-X.
 
-**Ctrl-Alt-S** requests the scene. After 120 seconds of keyboard inactivity it can
-also start automatically. `/IDLE=0` makes it hotkey-only. Volume, M and N remain
-available while it is active; other keys wake the foreground application.
-
-```dos
-SCENETSR /SHOW
-SCENETSR /OFF
-SCENETSR /ON
-SCENETSR /STATUS
-```
-
-The resident request is serviced at a safe DOS idle point through INT 28h.
-It deliberately waits while a foreground program does not yield to DOS; it is
-not an arbitrary interrupt-time takeover of running games. The TSR requires
-DOS 5+, the normal BIOS timer configuration, and a standard VGA 80×25 text screen, page 0. It defers during graphics mode,
-critical DOS activity or insufficient free scene memory. Keyboard inactivity is
-the idle trigger; mouse movement is not tracked.
-
-Hardware IRQs only update requests and idle counters. The scene runs on a private
-stack with the resident PSP/DTA, then restores the caller's PSP, DTA, clock hook,
-text, font, palette and cursor. Temporary DOS break/critical-error handlers protect resident file operations
-and are restored on wake. Scene allocations are released after wake. The
-current build retains about 102 KiB, plus the chosen scene's working memory while
-active. `/OFF` disables activation; reboot removes the resident code. There is
-no setup program, boot-file editor or automatic TSR installation.
-
-## Scenes and assets
-
-![Original MIT-licensed Night Coast demo](docs/demo.png)
-
-A pack is an ordinary DOS directory. The basic requirement is a 32,000-byte
-`SCENE.EGA`. Optional files provide masks, sprites, music and detail animation.
-See [the scene format](docs/scene-format.md) and [adding a scene](docs/authoring.md).
+## Build and extend
 
 ```sh
-python3 tools/make_demo.py --output build/scenes/demo
-python3 tools/pack_island.py --assets /path/to/local/extracted-assets
+nix develop --command python3 tests/run.py
+python3 tools/package.py
 ```
 
-The island pack uses locally obtained game/video assets and arrangements.
-The playable assets are **not distributed here** and are not relicensed under
-MIT. The documentation screenshot above is provided separately from the code. Its concept
-reference is *The Secrets of Monkey Island – An Evening With Ron Gilbert*,
-published by The Video Game History Foundation. See [island credits and source
-links](scenes/island/CREDITS.md) for the video, game artwork, all song arrangers
-and the disabled opening tune. [The extraction guide](scenes/island/README.md)
-describes rebuilding a private pack.
+Or build with Open Watcom 2: `./build.sh --watcom /path/to/watcom`.
+See the [scene format](docs/scene-format.md), [authoring guide](docs/authoring.md),
+[AdLib timing notes](docs/timing.md) and [embedding API](docs/embedding.md).
+[NETFTP](https://github.com/bstar/mTCP) embeds this runtime through a pinned submodule.
 
-The enabled island playlist is **Blow the Man Down**, **Haul Away, Joe!**, and
-**Homeward Bound**. **Nelson's Blood** is intentionally disabled. Oceans are
-synthesized by OPL2 rhythm/noise voices in the supplied local performances.
-The moon follows a projected setting arc, leaving view over about an hour;
-it stays out of view until the scene restarts.
+## Credits and license
 
-## Embedding and NETFTP
+Island artwork: *The Secret of Monkey Island*, Lucasfilm Games (1990).
+Concept and presentation: [The Video Game History Foundation stream](https://www.youtube.com/watch?v=ikaqus5_QIg&t=10722s).
 
-The runtime's [C interface](src/dos_scenes.h) is usable from C or C++:
+The included OPL2 treatments credit Barry Taylor (*Blow the Man Down*) and
+Lesley Nelson (*Haul Away, Joe!* and *Homeward Bound*), with added ocean layers.
+*Nelson's Blood* remains disabled. See [full credits and source links](scenes/island/CREDITS.md).
 
-```c
-if (dsBegin("C:\\SCENES\\ISLAND")) {
-    while (!wake_requested()) {
-        service_application();
-        dsStep();
-    }
-    dsEnd();
-}
-```
-
-Call `dsStep()` frequently from the foreground and forward music keys through
-`dsKey()`. The host owns text-state preservation and its wake policy. The runtime
-temporarily owns PIT channel 0/IRQ 0, chains the BIOS-rate timer, and expects the
-normal BIOS clock configuration on entry. It restores that timer configuration
-and its previous IRQ 0 vector on exit. [The embedding guide](docs/embedding.md)
-describes lifecycle, memory, volume and mTCP integration.
-
-The [LoC mTCP fork](https://github.com/bstar/mTCP) references this repository for
-NETFTP's Island option. NETFTP calls the cooperative API between packet polls;
-it does not load the TSR or launch an external scene process. The MIT runtime
-and mTCP's GPL application retain their respective licenses.
-
-## Compatibility and validation
-
-The player uses integer real-mode code and requires EGA/VGA with enough video
-memory for two display pages. A 286 or faster is the practical target. AdLib is
-optional; the scene remains usable without it. No EMS/XMS or 387 is required.
-The island's graphics/music buffers use roughly 270 KiB in addition to the
-executable, stack and surrounding application. Other packs may use much less.
-
-AdLib address/data writes retain the standard status-port read delays and add
-clock-based recovery checks. `/SLOWOPL` doubles the compatibility delay without
-changing CPU speed. The additional guard has a bounded retry count and falls
-back to the classic delays if the PIT does not advance. See
-[hardware timing and references](docs/timing.md).
-
-Tests run real DOS executables under DOSBox-X, including 64,000-pixel readback,
-quarter-hour/hour moon positions, volume persistence across processes, TSR
-hotkey/idle requests, private-stack entry, foreground restoration, low-memory
-and graphics-mode deferral. Emulator cycles are not calibrated MHz. Earlier
-island player/NETFTP versions were also tested on a physical 386SX-16 with AdLib;
-resident-mode validation is currently emulated.
-
-## License
-
-[MIT](LICENSE) for the original runtime, tools and demo. External game artwork,
-video imagery, arrangements and toolchain components retain their original terms.
+The code, tools and original Night Coast demo are [MIT licensed](LICENSE).
+The island artwork and musical arrangements retain their original credits.

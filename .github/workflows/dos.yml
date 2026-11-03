@@ -26,6 +26,8 @@ jobs:
       - name: Build and test DOS executables
         run: nix develop .#ci --command python3 tests/run.py
       - run: python3 tools/package.py
+      - name: Test the release ZIP and all island songs
+        run: nix develop .#ci --command python3 tests/test_release.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dos-scenes-msdos-${{ github.sha }}
