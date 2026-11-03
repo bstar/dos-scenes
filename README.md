@@ -1,5 +1,8 @@
 # DOS Scenes
 
+[![DOS build and tests](https://github.com/bstar/dos-scenes/actions/workflows/dos.yml/badge.svg?branch=main)](https://github.com/bstar/dos-scenes/actions/workflows/dos.yml)
+[![Latest release](https://img.shields.io/github/v/release/bstar/dos-scenes)](https://github.com/bstar/dos-scenes/releases/latest)
+
 A reusable scene player for real-mode DOS: EGA graphics, AdLib music, small
 animated details, and three ways to run the same scene—standalone, resident,
 or embedded in another foreground application.
@@ -32,6 +35,16 @@ This documentation screenshot is outside the MIT license; see
 - AdLib write recovery delays plus a bounded PIT-clock guard and `/SLOWOPL`.
 - Standalone `SCENE.EXE`, directly loaded `SCENETSR.EXE`, and a cooperative C API.
 
+## Download for MS-DOS
+
+Download [DOSSCENE.ZIP](https://github.com/bstar/dos-scenes/releases/latest/download/DOSSCENE.ZIP)
+from the [latest release](https://github.com/bstar/dos-scenes/releases/latest).
+It includes `SCENE.EXE`, the optional `SCENETSR.EXE`, the original Night Coast
+scene with OPL2 music, and DOS-format instructions. Unzip it into `C:\SCENES`
+and run `SCENE C:\SCENES\DEMO`. No installer or boot changes are required.
+The island's external artwork and music are supplied separately from your own
+assets. Release checksums are provided in `SHA256.TXT`.
+
 ## Build
 
 Use Open Watcom 2 and Python3. DOSBox-X is needed for the runtime tests.
@@ -46,6 +59,9 @@ Or use the pinned Nix environment:
 nix develop --command python3 tools/build.py
 nix develop --command python3 tests/run.py --no-build
 ```
+
+Run `python3 tools/package.py` after building to create the DOS release ZIP
+and its SHA-256 checksum in `dist/`.
 
 The build produces `build/SCENE.EXE`, `build/SCENETSR.EXE`, an embedded runtime
 object, and `build/scenes/demo`. It does not create a DOS setup program.
