@@ -60,6 +60,11 @@ nix develop --command python3 tools/build.py
 nix develop --command python3 tests/run.py --no-build
 ```
 
+Hosted CI uses the same pinned Nix Python/DOSBox-X environment with a
+checksum-verified [upstream Open Watcom SDK](https://github.com/open-watcom/open-watcom-v2/releases/tag/2026-11-01-Build),
+avoiding a full compiler bootstrap on each run. `tools/fetch_watcom.py` fetches
+that SDK; the normal Nix development shell still builds Watcom from source.
+
 Run `python3 tools/package.py` after building to create the DOS release ZIP
 and its SHA-256 checksum in `dist/`.
 

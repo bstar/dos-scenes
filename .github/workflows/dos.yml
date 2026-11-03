@@ -11,11 +11,20 @@ permissions:
 jobs:
   real-mode:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: "1"
+      WATCOM: ${{ github.workspace }}/build/toolchains/watcom
+      INCLUDE: ${{ github.workspace }}/build/toolchains/watcom/h
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: cachix/install-nix-action@75c75c31ebece974e48ebc36b4ad125bd97bd97b # v31.11.3
-      - run: nix develop --command python3 tests/run.py
+      - name: Fetch verified Open Watcom SDK
+        run: |
+          python3 tools/fetch_watcom.py
+          echo "$WATCOM/binl64" >> "$GITHUB_PATH"
+      - name: Build and test DOS executables
+        run: nix develop .#ci --command python3 tests/run.py
       - run: python3 tools/package.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
