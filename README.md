@@ -10,7 +10,13 @@ packs rather than compiled around one island or one soundtrack. An original
 MIT. The first externally sourced pack recreates the island presentation from
 [the Video Game History Foundation stream](https://www.youtube.com/watch?v=ikaqus5_QIg).
 
-![Original Night Coast demo](docs/demo.png)
+![Island scene running in the DOS player: moon, clouds, summit fire and town lights](docs/island.png)
+
+*Island scene captured from the DOS player in DOSBox-X. Artwork: The Secret of
+Monkey Island, Lucasfilm Games (1990); presentation inspired by the
+[Video Game History Foundation stream](https://www.youtube.com/watch?v=ikaqus5_QIg).
+This documentation screenshot is outside the MIT license; see
+[the full credits](scenes/island/CREDITS.md).*
 
 ## Features
 
@@ -115,6 +121,8 @@ no setup program, boot-file editor or automatic TSR installation.
 
 ## Scenes and assets
 
+![Original MIT-licensed Night Coast demo](docs/demo.png)
+
 A pack is an ordinary DOS directory. The basic requirement is a 32,000-byte
 `SCENE.EGA`. Optional files provide masks, sprites, music and detail animation.
 See [the scene format](docs/scene-format.md) and [adding a scene](docs/authoring.md).
@@ -125,7 +133,8 @@ python3 tools/pack_island.py --assets /path/to/local/extracted-assets
 ```
 
 The island pack uses locally obtained game/video assets and arrangements.
-They are **not distributed here** and are not relicensed under MIT. Its concept
+The playable assets are **not distributed here** and are not relicensed under
+MIT. The documentation screenshot above is provided separately from the code. Its concept
 reference is *The Secrets of Monkey Island – An Evening With Ron Gilbert*,
 published by The Video Game History Foundation. See [island credits and source
 links](scenes/island/CREDITS.md) for the video, game artwork, all song arrangers

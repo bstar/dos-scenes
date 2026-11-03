@@ -14,8 +14,11 @@ work; no authorship of the source game, stream or arrangements is claimed.
 
 The island artwork originates in the English EGA edition of *The Secret of
 Monkey Island* (Lucasfilm Games, 1990). Extract it from your own copy. Game
-artwork, video crops, MIDI files and derived performances are not included in
-this repository and are not covered by its MIT license.
+artwork assets, video crops, MIDI files and derived performances are not included
+in the playable distribution and are not covered by its MIT license. The README
+includes a documentation screenshot (`docs/island.png`) captured from the DOS
+player; the underlying game artwork remains credited to its original rights
+holders and is outside the MIT license.
 
 | Tune | Arrangement credit | Source | Playback |
 |---|---|---|---|
