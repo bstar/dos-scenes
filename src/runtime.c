@@ -17,6 +17,7 @@
 unsigned long dsFrames,dsSceneTicks;
 unsigned dsError,dsAdlib,dsFault;
 #endif
+unsigned dsTwinkles;
 static const char *asset_directory;
 static unsigned char far *background, far *frame;
 static unsigned char far *song;
@@ -393,6 +394,36 @@ static int is_sky(int x,int y) {
     if(x<0 || x>=320 || y<0 || y>=200) return 0;
     return sky && (sky[y*40+(x>>3)]&(0x80>>(x&7)));
 }
+/* Small, independent changes to existing stars, beneath all sky sprites. */
+static unsigned char far *twinkles;
+static unsigned twinkle_count;
+static unsigned twinkle_word(unsigned at) { return twinkles[at]|((unsigned)twinkles[at+1]<<8); }
+static int prepare_twinkles(void) {
+    unsigned size,i,at,period;
+    size=read_asset("TWINKLE.BIN",&twinkles,0);
+    twinkle_count=0; dsTwinkles=0;
+    if(!twinkles) return 1;
+    if(size<6 || _fmemcmp(twinkles,"TWK1",4)) return 0;
+    twinkle_count=twinkle_word(4);
+    if(twinkle_count>64 || size!=6+twinkle_count*12) return 0;
+    for(i=0,at=6;i<twinkle_count;i++,at+=12) {
+        period=twinkle_word(at+4);
+        if(twinkle_word(at)>=320 || twinkle_word(at+2)>=200 || !period ||
+           twinkle_word(at+6)>=period || !twinkle_word(at+8) || twinkle_word(at+8)>=period ||
+           twinkles[at+10]>15 || twinkles[at+11]>15) return 0;
+    }
+    dsTwinkles=twinkle_count;
+    return 1;
+}
+static void twinkle_stars(unsigned long now) {
+    unsigned i,at,x,y;
+    for(i=0,at=6;i<twinkle_count;i++,at+=12) {
+        if((now+twinkle_word(at+6))%twinkle_word(at+4)>=twinkle_word(at+8)) continue;
+        x=twinkle_word(at);y=twinkle_word(at+2);
+        if(is_sky(x,y) && background_color(x,y)==twinkles[at+10])
+            pixel(x,y,twinkles[at+11]);
+    }
+}
 /* Projected setting arc: one hour from the source position to beyond the
    right edge. Clamp at the horizon; the moon does not jump back into view. */
 static unsigned moon_arc[33][2]={
@@ -543,6 +574,8 @@ static void free_scene(void) {
     if(flames) { _ffree(flames); flames=0; }
     if(sky) { _ffree(sky); sky=0; }
     if(details) { _ffree(details);details=0; }
+    if(twinkles) { _ffree(twinkles);twinkles=0; }
+    twinkle_count=0;
     light_count=route_count=ripple_count=0;
     if(moon_sprite) { _ffree(moon_sprite); moon_sprite=0; }
     song=0; song_count=0; song_size=0;
@@ -639,6 +672,7 @@ static int load_scene(unsigned start_track) {
         if(!cw || cw>2000 || !ch || ch>100 || cloud_top+ch>200 || (unsigned long)cw*ch+8!=(unsigned)got) { _ffree(cloud); cloud=0; }
     } else if(cloud) { _ffree(cloud); cloud=0; }
     read_asset("SKY.MSK",&sky,8000);
+    if(!prepare_twinkles()) return 0;
     got=read_asset("FIRE.BIN",&flames,0);
     if(flames) {
         if(got<6) { _ffree(flames);flames=0; }
@@ -718,7 +752,7 @@ int main(int argc,char **argv) {
         _disable(); now=ticks; _enable();
         if(now-last<frame_ticks) continue; last=now;
         for(i=0;i<4;i++) { _fmemcpy(frame+i*PLANE,background+i*PLANE,PLANE); audio_poll(); }
-        draw_moon(now+scene_offset); clouds(now+scene_offset); fire(frames); stars(now+scene_offset); ambience(now+scene_offset);
+        twinkle_stars(now+scene_offset); draw_moon(now+scene_offset); clouds(now+scene_offset); fire(frames); stars(now+scene_offset); ambience(now+scene_offset);
         present(page); page^=1; frames++;
         if(audio_log && now-log_tick>=560UL) { log_tick=now; log_audio("SAMPLE",frames,0); }
     }
@@ -757,7 +791,7 @@ static unsigned long saver_last;
 int dsBegin(const char *directory) {
     union REGS r; unsigned i;
     if(installed || (directory && strlen(directory)>110)) { dsError=1;return 0; }
-    dsError=0; dsFrames=0; dsSceneTicks=0; dsFault=0; dsAdlib=0;
+    dsError=0; dsFrames=0; dsSceneTicks=0; dsFault=0; dsAdlib=0; dsTwinkles=0;
     ticks=0; volume_due=280UL; bios_phase=0; audio_due=0; audio_events=0; opl_writes=0;
     irq_batch_max=0; irq_caps=0; audio_fault=0; audio_late_max=0;
     track_changes=0; played_mask=0; opl_pit_guard=1; opl_pit_timeouts=0;
@@ -783,7 +817,7 @@ void dsStep(void) {
     if(now-saver_last<frame_ticks) return;
     saver_last=now;
     for(i=0;i<4;i++) { _fmemcpy(frame+i*PLANE,background+i*PLANE,PLANE); audio_poll(); }
-    draw_moon(now); clouds(now); fire(dsFrames); stars(now); ambience(now);
+    twinkle_stars(now); draw_moon(now); clouds(now); fire(dsFrames); stars(now); ambience(now);
     present(saver_page); saver_page^=1; dsFrames++; dsSceneTicks=now; dsFault=audio_fault;
 }
 void dsEnd(void) {

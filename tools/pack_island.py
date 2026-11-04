@@ -2,7 +2,7 @@
 """Build the bundled island scene, or regenerate it from local source assets."""
 import argparse,json,shutil
 from pathlib import Path
-from scene_format import details
+from scene_format import details,twinkles
 ROOT=Path(__file__).resolve().parents[1]
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--assets',type=Path,help='Optional locally extracted source assets');p.add_argument('--output',type=Path,default=ROOT/'build/scenes/island');a=p.parse_args()
@@ -13,6 +13,7 @@ def main():
   if not (source/name).is_file():p.error('Missing local asset: '+name)
  a.output.mkdir(parents=True,exist_ok=True)
  for name in required:shutil.copyfile(source/name,a.output/('SCENE.EGA' if name==background else name))
+ (a.output/'TWINKLE.BIN').write_bytes(twinkles(json.loads((ROOT/'scenes/island/twinkle.json').read_text())))
  data=json.loads((ROOT/'scenes/island/details.json').read_text());(a.output/'DETAILS.BIN').write_bytes(details(**data))
  (a.output/'SCENE.CFG').write_bytes(b'NAME Melee Island\r\nFIRE_X 136\r\nFIRE_Y 0\r\nMOON_SECONDS 3600\r\nMOON_DX 88\r\nMOON_DY 80\r\n')
  (a.output/'PLAYLIST.CFG').write_bytes(b'SONG2.OPL\r\nSONG3.OPL\r\nSONG4.OPL\r\n# INTRO.OPL is intentionally disabled.\r\n')

@@ -19,3 +19,12 @@ def details(lights=(),routes=(),ripples=()):
  for ripple in ripples:out+=P('<8H2B',*ripple)
  if len(out)>60000:raise ValueError('DETAILS.BIN exceeds the real-mode file limit')
  return out
+
+def twinkles(points):
+ if len(points)>64:raise ValueError('At most 64 twinkle points')
+ out=bytearray(b'TWK1'+P('<H',len(points)))
+ for point in points:
+  x,y,period,phase,duration,base,dim=(point[k] for k in ('x','y','period','phase','duration','base','dim'))
+  if not (0<=x<320 and 0<=y<200 and 0<duration<period<=65535 and 0<=phase<period and 0<=base<16 and 0<=dim<16):raise ValueError('Invalid twinkle point')
+  out+=P('<5H2B',x,y,period,phase,duration,base,dim)
+ return bytes(out)

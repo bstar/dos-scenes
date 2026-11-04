@@ -14,7 +14,7 @@ for name,data in files.items():
 # Explicit allowlists keep saved volume, logs and source projects out of releases.
 for name in ('SCENE.EGA','SKY.MSK','PALETTE.BIN','MOON.BIN','CLOUD.BIN','DETAILS.BIN','SCENE.CFG','DEMO.OPL','PLAYLIST.CFG'):
  files['DEMO/'+name]=(ROOT/'build/scenes/demo'/name).read_bytes()
-for name in ('SCENE.EGA','SKY.MSK','PALETTE.BIN','MOON.BIN','CLOUD.BIN','CLOUD.MOT','FIRE.BIN','STAR1.BIN','STAR2.BIN','DETAILS.BIN','SCENE.CFG','SONG2.OPL','SONG3.OPL','SONG4.OPL','PLAYLIST.CFG','CREDITS.TXT'):
+for name in ('SCENE.EGA','SKY.MSK','PALETTE.BIN','MOON.BIN','CLOUD.BIN','CLOUD.MOT','FIRE.BIN','STAR1.BIN','STAR2.BIN','TWINKLE.BIN','DETAILS.BIN','SCENE.CFG','SONG2.OPL','SONG3.OPL','SONG4.OPL','PLAYLIST.CFG','CREDITS.TXT'):
  files['ISLAND/'+name]=(ROOT/'build/scenes/island'/name).read_bytes()
 def text(s):return s.replace('\r\n','\n').replace('\n','\r\n').encode('ascii')
 files['LICENSE.TXT']=text((ROOT/'LICENSE').read_text())

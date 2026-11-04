@@ -14,10 +14,24 @@ filenames should fit8.3. Runtime files are limited to60,000bytes each.
 | `CLOUD.MOT` | `<u16 spacing,u16 numerator,u16 denominator,u32 cycle_ticks>` |
 | `FIRE.BIN` | `<u16 width,u16 height,u16 frames>` then opaque indexed frames |
 | `MOON.BIN` | `<u16 x,u16 y,u16 width,u16 height>` then indexed pixels |
+| `TWINKLE.BIN` | `TWK1`, u16 count, then 12-byte star dimming records |
 | `STAR1.BIN`, `STAR2.BIN` | Meteor sequence, described below |
 | `PLAYLIST.CFG` | One local8.3 OPL filename per line; `#` disables a line |
 | `*.OPL` | Repeated `<u16 delay_before_write,u8 register,u8 value>` |
 | `DETAILS.BIN` | Lights, individual walking routes, and water ripples |
+
+An optional `TWINKLE.BIN` contains up to 64 records:
+`<u16 x,y,period,phase,duration,u8 original_color,dim_color>`. A point changes
+only when `(ticks+phase)%period < duration`, its clean background has the
+specified original color, and it belongs to `SKY.MSK`. Coordinates and colors
+are validated; duration must be positive and shorter than the period. Twinkles
+render before the moon, clouds and meteors, preserving their occlusion. Without
+this file, the sky is unchanged. The island briefly switches 12 larger stars and 8 small cyan pinpoints to
+sampled local sky colors, then restores their original pixels. Larger stars
+blink for about 0.34 seconds and smaller stars for about 0.26 seconds. A shuffled
+sixteen-second schedule gives each star a separate slot: only one star blinks
+at a time. Center and halo records share a phase. The palette registers are unchanged.
+
 
 The clean background must contain the sky beneath the moon. Clouds render after
 the moon and are clipped by `SKY.MSK`; terrain occludes both. Animation uses
