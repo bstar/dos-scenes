@@ -11,6 +11,8 @@ int dsKey(unsigned key);
 unsigned dsGetVolume(void);
 extern unsigned long dsFrames,dsSceneTicks;
 extern unsigned dsError,dsAdlib,dsFault;
+/* Record count loaded during the last activation, retained after dsEnd. */
+extern unsigned dsTwinkles;
 #ifdef __cplusplus
 }
 #endif

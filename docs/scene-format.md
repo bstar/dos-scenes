@@ -26,12 +26,12 @@ only when `(ticks+phase)%period < duration`, its clean background has the
 specified original color, and it belongs to `SKY.MSK`. Coordinates and colors
 are validated; duration must be positive and shorter than the period. Twinkles
 render before the moon, clouds and meteors, preserving their occlusion. Without
-this file, the sky is unchanged. The island uses 12 larger stars on staggered 27-59 second cycles. Each
-2.5-second pulse dims the center to pale cyan, dims the core and existing cyan
-halo together for the middle 1.25 seconds, then recovers. Overlapping records
-provide that two-step envelope. Eight small cyan pinpoints also dim briefly
-on independent 20-35 second cycles. No palette registers change and stars
-stay visible.
+this file, the sky is unchanged. The island briefly switches 12 larger stars and 8 small cyan pinpoints to
+sampled local sky colors, then restores their original pixels. Larger stars
+blink for about 0.17 seconds every 3-6 seconds; smaller stars blink for about
+0.13 seconds every 2-4 seconds. Center and halo records share a phase, and
+stars have independent periods. The palette registers are unchanged.
+
 
 The clean background must contain the sky beneath the moon. Clouds render after
 the moon and are clipped by `SKY.MSK`; terrain occludes both. Animation uses
