@@ -28,9 +28,9 @@ are validated; duration must be positive and shorter than the period. Twinkles
 render before the moon, clouds and meteors, preserving their occlusion. Without
 this file, the sky is unchanged. The island briefly switches 12 larger stars and 8 small cyan pinpoints to
 sampled local sky colors, then restores their original pixels. Larger stars
-blink for about 0.17 seconds every 3-6 seconds; smaller stars blink for about
-0.13 seconds every 2-4 seconds. Center and halo records share a phase, and
-stars have independent periods. The palette registers are unchanged.
+blink for about 0.34 seconds and smaller stars for about 0.26 seconds. A shuffled
+eight-second schedule gives each star a separate slot: only one star blinks
+at a time. Center and halo records share a phase. The palette registers are unchanged.
 
 
 The clean background must contain the sky beneath the moon. Clouds render after
