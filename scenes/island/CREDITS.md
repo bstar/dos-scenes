@@ -14,7 +14,7 @@ work; no authorship of the source game, stream or arrangements is claimed.
 
 The island artwork originates in the English EGA edition of *The Secret of
 Monkey Island* (Lucasfilm Games, 1990). The included scene pack and README
-screenshot retain that artwork credit. The engine, adaptation tools and original
+animated preview retain that artwork credit. The engine, adaptation tools and original
 Night Coast demo are MIT licensed; the original game artwork and credited
 musical arrangements are acknowledged separately and are not relicensed as
 original MIT material.

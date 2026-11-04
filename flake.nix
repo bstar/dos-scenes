@@ -8,6 +8,9 @@
       default = pkgs.mkShell {
         packages = [ pkgs.open-watcom-v2 pkgs.python3 pkgs.dosbox-x ];
       };
+      preview = pkgs.mkShell {
+        packages = [ (pkgs.python3.withPackages (p: [ p.pillow ])) pkgs.dosbox-x pkgs.gifsicle ];
+      };
       ci = pkgs.mkShell {
         packages = [ pkgs.python3 pkgs.dosbox-x ];
       };

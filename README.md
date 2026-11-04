@@ -6,7 +6,7 @@
 Animated scenes for MS-DOS, with EGA graphics and AdLib OPL2 music. Run them as
 a standalone app, an optional TSR screensaver, or inside another application.
 
-![Island scene running in DOS](docs/island.png)
+<img src="docs/island.svg" width="640" height="400" alt="15-second DOS island animation at twice its native resolution">
 
 ## Download and run
 
@@ -22,8 +22,8 @@ an original Night Coast demo (`SCENE C:\SCENES\DEMO`). No installer or boot chan
 Checksums are included with the [release](https://github.com/bstar/dos-scenes/releases/latest).
 
 The island has moving clouds, a setting moon, subtly twinkling stars,
-shooting stars, summit fire,
-subtle lights and water, and people walking through town and up the mountain.
+shooting stars and summit fire, with subtle lights, water, and people walking
+through town and up the mountain.
 
 | Key | Action |
 |---|---|
