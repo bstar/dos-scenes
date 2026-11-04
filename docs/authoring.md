@@ -31,7 +31,7 @@ nix develop .#preview --command python3 tools/record_preview.py
 This records 15 seconds of the actual DOS renderer, samples its native planar
 pages, and writes a losslessly optimized 320x200 GIF to
 `build/preview/ISLAND.GIF`. It checks decoded GIF pixels and the exact duration.
-`docs/island.svg` embeds that same native GIF and forces pixelated 2x browser
-scaling, since GitHub strips that CSS from README HTML. The displayed image
-is 640x400 with hard 2x2 source pixels. No image quantization or lossy GIF
-compression is applied.
+`docs/island.gif` is a browser-compatible animated GIF with lossless nearest-
+neighbor pixel doubling to 640x400. Every 2x2 block is checked against the native
+frame. This avoids SVG embedded-animation inconsistencies and GitHub stripping
+pixel-scaling CSS. No image quantization or lossy GIF compression is applied.

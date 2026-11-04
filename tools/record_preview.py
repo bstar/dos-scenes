@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Capture 15 seconds from the actual DOS renderer and losslessly optimize a native GIF."""
 from pathlib import Path
-import base64,bisect,json,os,shutil,struct,subprocess,sys
+import bisect,json,os,shutil,struct,subprocess,sys
 from PIL import Image,ImageChops,ImageSequence
 R=Path(__file__).resolve().parents[1]
 sdk=Path(os.environ.get('WATCOM',R/'build/toolchains/watcom'))
@@ -44,6 +44,23 @@ with Image.open(output) as gif:
    assert actual==frames[i].convert('RGB').tobytes()
   elapsed+=duration
  assert elapsed==1500
-svg=R/'docs/island.svg';svg.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">\n<title>DOS island scene - 15 seconds</title>\n<image width="640" height="400" style="image-rendering:pixelated" href="data:image/gif;base64,'+base64.b64encode(output.read_bytes()).decode()+'"/>\n</svg>\n')
-report=dict(duration_ms=15000,native_size=[320,200],display_size=[640,400],fps=fps,captured_frames=len(records),gif_bytes=output.stat().st_size,unoptimized_bytes=unoptimized.stat().st_size,lossless_verified=True)
-(D/'validation.json').write_text(json.dumps(report,indent=2));print(json.dumps(report));print(output);print(svg)
+doubled=[]
+for level in (2,3):
+ dest=D/f'doubled-{level}.gif'
+ subprocess.run(['gifsicle','--scale','2','--resize-method=sample',f'-O{level}','--no-comments','--no-names',str(output),'-o',str(dest)],check=True)
+ doubled.append(dest)
+readme=R/'docs/island.gif';shutil.copyfile(min(doubled,key=lambda p:p.stat().st_size),readme)
+with Image.open(readme) as gif:
+ assert gif.size==(640,400) and gif.info['loop']==0
+ elapsed=0
+ for frame in ImageSequence.Iterator(gif):
+  duration=frame.info['duration']//10;at=bisect.bisect_right(starts,elapsed)-1
+  actual=frame.convert('RGB');expected=frames[at].resize((640,400),Image.Resampling.NEAREST).convert('RGB')
+  assert actual.tobytes()==expected.tobytes()
+  for i in range(at+1,len(starts)):
+   if starts[i]>=elapsed+duration:break
+   assert actual.tobytes()==frames[i].resize((640,400),Image.Resampling.NEAREST).convert('RGB').tobytes()
+  elapsed+=duration
+ assert elapsed==1500
+report=dict(duration_ms=15000,native_size=[320,200],display_size=[640,400],fps=fps,captured_frames=len(records),gif_bytes=output.stat().st_size,readme_gif_bytes=readme.stat().st_size,unoptimized_bytes=unoptimized.stat().st_size,lossless_verified=True)
+(D/'validation.json').write_text(json.dumps(report,indent=2));print(json.dumps(report));print(output);print(readme)

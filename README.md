@@ -6,7 +6,7 @@
 Animated scenes for MS-DOS, with EGA graphics and AdLib OPL2 music. Run them as
 a standalone app, an optional TSR screensaver, or inside another application.
 
-<img src="docs/island.svg" width="640" height="400" alt="15-second DOS island animation at twice its native resolution">
+<img src="docs/island.gif" width="640" height="400" alt="15-second DOS island animation at twice its native resolution">
 
 ## Download and run
 
