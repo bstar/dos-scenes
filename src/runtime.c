@@ -15,8 +15,9 @@
 #include "dos_scenes.h"
 
 unsigned long dsFrames,dsSceneTicks;
-unsigned dsError,dsAdlib,dsFault,dsTwinkles;
+unsigned dsError,dsAdlib,dsFault;
 #endif
+unsigned dsTwinkles;
 static const char *asset_directory;
 static unsigned char far *background, far *frame;
 static unsigned char far *song;
