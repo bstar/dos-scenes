@@ -14,6 +14,11 @@ def compose(directory,t,frame,ambient=True):
  def allowed(x,y):return 0<=x<320 and 0<=y<200 and sky[y*40+x//8]&(128>>(x%8))
  def pixel(x,y,c):
   if 0<=x<320 and 0<=y<200:out[y*320+x]=c
+ if (d/'TWINKLE.BIN').exists():
+  b=(d/'TWINKLE.BIN').read_bytes();count=struct.unpack_from('<H',b,4)[0]
+  for i in range(count):
+   x,y,period,phase,duration,source,dim=struct.unpack_from('<5H2B',b,6+i*12)
+   if allowed(x,y) and base[y*320+x]==source and (t+phase)%period<duration:pixel(x,y,dim)
  if (d/'MOON.BIN').exists():
   b=(d/'MOON.BIN').read_bytes();x,y,w,h=struct.unpack_from('<4H',b);duration=int(opts.get('MOON_SECONDS',3600))*560
   if t<duration:

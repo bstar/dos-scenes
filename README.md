@@ -21,7 +21,8 @@ The release includes the island scene, three OPL2 songs with ocean sounds, and
 an original Night Coast demo (`SCENE C:\SCENES\DEMO`). No installer or boot changes.
 Checksums are included with the [release](https://github.com/bstar/dos-scenes/releases/latest).
 
-The island has moving clouds, a setting moon, shooting stars, summit fire,
+The island has moving clouds, a setting moon, subtly twinkling stars,
+shooting stars, summit fire,
 subtle lights and water, and people walking through town and up the mountain.
 
 | Key | Action |

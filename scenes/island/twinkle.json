@@ -1,0 +1,74 @@
+[
+  {
+    "x": 21,
+    "y": 10,
+    "period": 19013,
+    "phase": 17813,
+    "duration": 720,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 108,
+    "y": 11,
+    "period": 23003,
+    "phase": 19503,
+    "duration": 840,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 164,
+    "y": 13,
+    "period": 27109,
+    "phase": 20709,
+    "duration": 760,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 306,
+    "y": 10,
+    "period": 20929,
+    "phase": 11129,
+    "duration": 900,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 75,
+    "y": 28,
+    "period": 31013,
+    "phase": 18513,
+    "duration": 800,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 279,
+    "y": 28,
+    "period": 24989,
+    "phase": 9489,
+    "duration": 740,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 37,
+    "y": 38,
+    "period": 28309,
+    "phase": 9809,
+    "duration": 880,
+    "base": 15,
+    "dim": 11
+  },
+  {
+    "x": 306,
+    "y": 50,
+    "period": 32999,
+    "phase": 11499,
+    "duration": 820,
+    "base": 15,
+    "dim": 11
+  }
+]
